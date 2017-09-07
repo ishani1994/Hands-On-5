@@ -1,0 +1,121 @@
+setwd("/Users/ishani/Desktop/AMMA 2017/Data/data_2017")
+employee_fle <- read.csv("/Users/ishani/Desktop/AMMA 2017/Data/data_2017/Emp.csv")
+depmtn_fle <- read.csv("/Users/ishani/Desktop/AMMA 2017/Data/data_2017/Dept.csv")
+
+employee_df<- data.frame(employee_fle)
+depmtn_df<- data.frame(depmtn_fle)
+
+merged_table<-merge(employee_df,depmtn_df, by=c("DEPTNO"), all = TRUE)
+View(merged_table)
+tot_sal_lon<-0
+tot_sal_par<-0
+tot_sal_nw<-0
+tot_sal_tok<-0
+cnt_lon<-0
+cnt_par<-0
+cnt_nw<-0
+cnt_tok<-0
+for(i in 1:nrow(merged_table))
+{
+  if(!is.na(merged_table$LOC[i]))
+  {
+  if(merged_table$LOC[i]=="LONDON")
+  {
+   cnt_lon=cnt_lon+1 
+   tot_sal_lon<- tot_sal_lon + merged_table$SAL[i]
+  }
+    else if(merged_table$LOC[i]=="TOKYO")
+    {
+      cnt_tok=cnt_tok+1
+      tot_sal_tok<- tot_sal_tok + merged_table$SAL[i]
+    }
+    else if(merged_table$LOC[i]=="NEW YORK")
+    {
+      cnt_nw=cnt_nw+1
+      tot_sal_nw<- tot_sal_nw + merged_table$SAL[i] 
+    }
+    else
+    {
+      cnt_par=cnt_par+1
+      tot_sal_par<- tot_sal_par + merged_table$SAL[i] 
+    }
+  }
+}
+#Calculating Average Salary Based on Location
+avrg_sal_lon <- tot_sal_lon/cnt_lon
+avrg_sal_tok <- tot_sal_tok/cnt_tok
+avrg_sal_nw <- tot_sal_nw/cnt_nw
+avrg_sal_par <- tot_sal_par/cnt_par
+
+#3rd part
+req_dataset<- data.frame("MANAGER"=  merged_table$MGR,"EMP_NAME"= merged_table$ENAME)
+View(req_dataset)
+cnt_7782<-0
+cnt_7839<-0
+cnt_7566<-0
+cnt_7788<-0
+cnt_7902<-0
+cnt_7698<-0
+
+for(k in 1:nrow(req_dataset))
+{
+  if(!is.na(req_dataset$MANAGER[k])) 
+  {
+    if(req_dataset$MANAGER[k]==7782)
+    {
+      cnt_7782<-cnt_7782+1
+    }
+    else if(req_dataset$MANAGER[k]==7839)
+    {
+      cnt_7839<-cnt_7839+1
+    }
+    else if(req_dataset$MANAGER[k]==7566)
+    {
+      cnt_7566<-cnt_7566+1
+    }
+    else if(req_dataset$MANAGER[k]==7788)
+    {
+      cnt_7788<-cnt_7788+1
+    }
+    else if(req_dataset$MANAGER[k]==7902)
+    {
+      cnt_7902<-cnt_7902+1
+    }
+    else if(req_dataset$MANAGER[k]==7698)
+    {
+      cnt_7698<-cnt_7698+1
+    }
+  }
+}
+print("The highest number in a manager is=")
+print(7698)
+
+#Part 4
+merged_table$INC_SAL<-0
+for(j in 1:nrow(merged_table))
+{
+  if(!is.na(merged_table$JOB[j])) 
+  {
+    if(merged_table$JOB[j]=="ANALYST")
+    {
+      merged_table$INC_SAL[j] <- merged_table$SAL[j] + (0.15 * merged_table$SAL[j])
+    }
+    else if(merged_table$JOB[j]=="CLERK")
+    {
+      merged_table$INC_SAL[j] <- merged_table$SAL[j] + (0.125 * merged_table$SAL[j])
+    }
+    else if(merged_table$JOB[j]=="MANAGER")
+    {
+      merged_table$INC_SAL[j] <- merged_table$SAL[j] + (0.102 * merged_table$SAL[j])
+    }
+    else if(merged_table$JOB[j]=="PRESIDENT")
+    {
+      merged_table$INC_SAL[j] <- merged_table$SAL[j] + (0.057 * merged_table$SAL[j])
+    }
+    else if(merged_table$JOB[j]=="SALESMAN")
+    {
+      merged_table$INC_SAL[j] <- merged_table$SAL[j] + (0.133 * merged_table$SAL[j])
+    }
+  }
+}
+View(merged_table)
